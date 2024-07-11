@@ -1,0 +1,8 @@
+<ng-container *ngIf="meetingsForDay$ | async as meetingsForDay">
+  <app-small-calendar [meetingsForDay]="meetingsForDay$ | async" />
+</ng-container>
+
+<app-stars-rating
+  [rating]="4"
+  [reviewsCount]="128"
+  [doctorId]="'29eff914-786b-47b5-b70e-20b9b8630a31'"></app-stars-rating>

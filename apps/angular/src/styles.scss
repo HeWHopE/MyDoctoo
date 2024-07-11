@@ -1,0 +1,84 @@
+@import './styles/reset';
+@import './styles/variables';
+
+@import url('https://fonts.googleapis.com/css?family=Inter:regular,500?display=swap');
+@import url('https://fonts.googleapis.com/css?family=Syncopate:regular,700?display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+body {
+  font-family: $font-inter;
+  font-weight: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+h1 {
+  font-family: $font-inter;
+  font-size: 1.875rem;
+  font-weight: 500;
+}
+
+h2 {
+  font-family: $font-inter;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+h3 {
+  font-family: $font-inter;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+p {
+  font-family: $font-inter;
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+a {
+  font-family: $font-inter;
+  font-size: 1rem;
+  font-weight: normal;
+  text-decoration: underline;
+}
+
+.text-helper {
+  font-family: $font-inter;
+  font-size: 0.875rem;
+  font-weight: normal;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.input-file-pointer::-webkit-file-upload-button {
+  cursor: pointer;
+}
+
+.input-file-pointer {
+  cursor: pointer;
+}
+
+.mat-typography p, h2 {
+  margin-bottom: 0;
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+

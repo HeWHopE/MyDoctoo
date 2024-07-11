@@ -1,0 +1,17 @@
+<section *ngIf="reviews$ | async as reviews">
+  <ng-container *ngIf="doctor$ | async as doctor">
+    <app-reviews-header [doctor]="doctor" />
+  </ng-container>
+
+  <app-reviews-body [reviews]="reviews" />
+
+  <ng-container *ngIf="doctor$ | async as doctor">
+    <div class="paginator-container">
+      <mat-paginator
+        [length]="doctor.reviewsCount"
+        [pageSize]="reviewsPerPage"
+        [pageSizeOptions]="[3, 6, 9, 12]"
+        (page)="handlePageChange($event)"></mat-paginator>
+    </div>
+  </ng-container>
+</section>

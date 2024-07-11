@@ -1,0 +1,75 @@
+/* Import fonts */
+@import url('https://fonts.googleapis.com/css?family=Inter:regular,500?display=swap');
+@import url('https://fonts.googleapis.com/css?family=Syncopate:regular,700?display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  @apply font-sans;
+  @apply font-normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+@layer base {
+  h1 {
+    @apply font-inter text-3xl font-medium;
+  }
+
+  h2 {
+    @apply font-inter text-2xl font-medium;
+  }
+
+  h3 {
+    @apply font-inter text-xl font-medium;
+  }
+
+  p {
+    @apply font-inter text-base font-normal;
+  }
+
+  a {
+    @apply font-inter text-base font-normal underline;
+  }
+}
+
+@layer components {
+  .text-helper {
+    @apply font-inter text-sm font-normal;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #b0b0b0;
+    border-radius: 10px;
+  }
+}
+
+.input-file-pointer::-webkit-file-upload-button {
+  cursor: pointer;
+}
+
+.input-file-pointer {
+  cursor: pointer;
+}

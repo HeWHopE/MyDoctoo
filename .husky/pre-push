@@ -1,0 +1,6 @@
+node .husky/hooks/check-branch-name.js
+pnpm format
+pnpm lint
+pnpm backend:prebuild
+pnpm backend:test
+pnpm frontend:test

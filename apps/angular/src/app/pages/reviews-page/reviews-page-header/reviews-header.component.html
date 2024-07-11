@@ -1,0 +1,33 @@
+<div class="reviews-header">
+  <img width="112" height="112" [src]="doctor.avatarKey" [alt]="fullName" class="avatar" />
+
+  <div class="details">
+    <div class="header">
+      <span class="name">{{ fullName }}</span>
+      <app-button>Book appointment</app-button>
+    </div>
+
+    <div>
+      <span class="specialization">{{ doctor.specializations[0].name }}</span>
+
+      <div class="rating">
+        <div class="stars">
+          <i
+            class="fa-solid fa-star"
+            *ngFor="let i of [].constructor(5); let idx = index"
+            [ngClass]="{
+              'star-size text-main-dark': doctor.rating > idx,
+              'star-size text-grey-5': doctor.rating <= idx
+            }"
+            style="margin-right: 4px">
+          </i>
+        </div>
+
+        <span class="reviews-count">
+          Total reviews:
+          <span>{{ doctor.reviewsCount }}</span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

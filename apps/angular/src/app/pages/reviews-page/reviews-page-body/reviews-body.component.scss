@@ -1,0 +1,55 @@
+@import '../../../../styles.scss';
+
+section {
+  width: 60%; // equivalent to w-3/4 in Tailwind
+  margin-top: 20px;
+
+  mat-card {
+    display: flex; // equivalent to fxLayout="column"
+    margin: 16px 0; // equivalent to margin-bottom and margin-top in Tailwind
+    padding: 16px 0 0 16px; // equivalent to padding-top and padding-left in Tailwind
+    border-radius: 12px;
+    gap: 12px;
+
+    .star-row {
+      display: flex; // equivalent to fxLayout="row"
+      margin: 0 0 0px 12px; // equivalent to margin-left and margin-bottom in Tailwind
+    }
+
+    mat-card-content {
+      gap: 12px;
+      blockquote {
+        border-left: 4px solid $grey-4; // equivalent to border-l-4 border-grey-1 border-opacity-50 in Tailwind
+        padding: 0 0.5rem; // equivalent to px-2 in Tailwind
+
+        p {
+          color: #212121; // equivalent to text-gray-900 in Tailwind
+          font-size: 1rem; // equivalent to text-base in Tailwind
+          font-weight: 500; // equivalent to font-medium in Tailwind
+          font-style: italic; // equivalent to italic in Tailwind
+          line-height: 1.75; // equivalent to leading-relaxed in Tailwind
+          color: $text; // equivalent to dark:text-white in Tailwind
+        }
+      }
+
+      span {
+        font-weight: bold; // equivalent to font-semibold in Tailwind
+        font-style: italic; // equivalent to italic in Tailwind
+        font-size: 1rem; // equivalent to text-base in Tailwind
+      }
+    }
+  }
+}
+
+.text-main-dark {
+  color: $main-dark;
+}
+
+.text-grey-5 {
+  color: $grey-5;
+}
+
+.star-size {
+  height: 18px;
+  width: 18px;
+}

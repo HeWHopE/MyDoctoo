@@ -1,0 +1,184 @@
+version: '3.8'
+
+services:
+  adminer:
+    restart: always
+    image: adminer:latest
+    networks:
+      - caddy
+      - doctoo
+    labels:
+      caddy: adminer.doctoo.org
+      caddy.reverse_proxy: '{{upstreams 8080}}'
+      caddy.basicauth: '*'
+      caddy.basicauth.radency: '$ADMINER_PASSWORD'
+
+  postgres:
+    restart: always
+    image: postgres:14.5
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    networks:
+      - doctoo
+    volumes:
+      - postgres_prod_db:/var/lib/postgresql/data
+
+  postgres_backup:
+    restart: always
+    image: satont/postgresql-backup-s3:latest
+    environment:
+      POSTGRES_DATABASE: 'all'
+      POSTGRES_HOST: 'postgres'
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      S3_ACCESS_KEY_ID: ${MINIO_ACCESS_KEY}
+      S3_SECRET_ACCESS_KEY: ${MINIO_SECRET_KEY}
+      S3_BUCKET: ${BACKUP_BUCKET_NAME}
+      S3_REGION: ${BACKUP_BUCKET_REGION}
+      S3_ENDPOINT: ${BACKUP_ENDPOINT}
+      SCHEDULE: ${BACKUP_SCHEDULE}
+      ENCRYPTION_PASSWORD: ${ENCRYPTION_PASSWORD}
+    networks:
+      - doctoo
+
+  backend:
+    restart: always
+    image: registry.doctoo.org/radency/doctoo-backend:latest
+    environment:
+      APP_NAME: ${APP_NAME}
+      BACKEND_PORT: ${BACKEND_PORT}
+      BACKEND_URL: ${BACKEND_URL}
+      FRONTEND_URL: ${FRONTEND_URL}
+      DATABASE_URL: 'postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres/${POSTGRES_DB}?schema=public'
+      NODE_ENV: ${NODE_ENV}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION_DAYS: ${JWT_EXPIRATION_DAYS}
+      JWT_EXPIRATION_TRESHOLD_SECONDS: ${JWT_EXPIRATION_TRESHOLD_SECONDS}
+      SALT_ROUNDS: ${SALT_ROUNDS}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      GOOGLE_REDIRECT_URL: ${GOOGLE_REDIRECT_URL}
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      MINIO_USE_SSL: ${MINIO_USE_SSL}
+      MINIO_BUCKET_NAME: ${MINIO_BUCKET_NAME}
+      MAIL_HOST: ${MAIL_HOST}
+      MAIL_USER: ${MAIL_USER}
+      MAIL_PASS: ${MAIL_PASS}
+      MAIL_FROM: ${MAIL_FROM}
+      MAIL_PORT: ${MAIL_PORT}
+      MAIL_SECURE: ${MAIL_SECURE}
+      FRONTEND_SIGNUP_PATH: ${FRONTEND_SIGNUP_PATH}
+      FRONTEND_CHANGE_EMAIL_PATH: ${FRONTEND_CHANGE_EMAIL_PATH}
+      STRIPE_API_KEY: ${STRIPE_API_KEY}
+      TZ: ${TZ}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      CACHE_DAYS_TO_LIVE: ${CACHE_DAYS_TO_LIVE}
+      RMQ_HOST: ${RMQ_HOST}
+      RMQ_PORT: ${RMQ_PORT}
+      RMQ_USERNAME: ${RMQ_USERNAME}
+      RMQ_PASSWORD: ${RMQ_PASSWORD}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_API_ASSISTANT_ID: ${OPENAI_API_ASSISTANT_ID}
+    depends_on:
+      - postgres
+    networks:
+      - caddy
+      - doctoo
+    labels:
+      caddy: api.doctoo.org
+      caddy.reverse_proxy: '{{upstreams $BACKEND_PORT}}'
+
+  summarizer:
+    restart: always
+    image: registry.doctoo.org/radency/doctoo-summarizer:latest
+    environment:
+      HF_TOKEN: ${HF_TOKEN}
+      HF_MODEL_NAME: ${HF_MODEL_NAME}
+      RMQ_HOST: ${RMQ_HOST}
+      RMQ_PORT: ${RMQ_PORT}
+      RMQ_USERNAME: ${RMQ_USERNAME}
+      RMQ_PASSWORD: ${RMQ_PASSWORD}
+    depends_on:
+      - rabbitmq
+    networks:
+      - doctoo
+
+  mailer:
+    restart: always
+    image: registry.doctoo.org/radency/doctoo-mailer:latest
+    environment:
+      MAIL_HOST: ${MAIL_HOST}
+      MAIL_USER: ${MAIL_USER}
+      MAIL_PASS: ${MAIL_PASS}
+      MAIL_FROM: ${MAIL_FROM}
+      MAIL_PORT: ${MAIL_PORT}
+      MAIL_SECURE: ${MAIL_SECURE}
+      RMQ_HOST: ${RMQ_HOST}
+      RMQ_PORT: ${RMQ_PORT}
+      RMQ_USERNAME: ${RMQ_USERNAME}
+      RMQ_PASSWORD: ${RMQ_PASSWORD}
+      APP_NAME: ${APP_NAME}
+      BACKEND_URL: ${BACKEND_URL}
+      FRONTEND_URL: ${FRONTEND_URL}
+      NODE_ENV: ${NODE_ENV}
+      FRONTEND_SIGNUP_PATH: ${FRONTEND_SIGNUP_PATH}
+      FRONTEND_CHANGE_EMAIL_PATH: ${FRONTEND_CHANGE_EMAIL_PATH}
+    depends_on:
+      - rabbitmq
+    networks:
+      - doctoo
+
+  frontend:
+    restart: always
+    image: registry.doctoo.org/radency/doctoo-frontend:latest
+    depends_on:
+      - backend
+    networks:
+      - doctoo
+      - caddy
+    labels:
+      caddy: doctoo.org
+      caddy.reverse_proxy: '{{upstreams 8080}}'
+
+  redis:
+    restart: always
+    image: redis:alpine
+    command: redis-server --requirepass "$REDIS_PASSWORD"
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    networks:
+      - doctoo
+      - caddy
+    volumes:
+      - redis_prod_data:/data
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RMQ_USERNAME}
+      RABBITMQ_DEFAULT_PASS: ${RMQ_PASSWORD}
+      RABBITMQ_NODE_PORT: ${RMQ_PORT}
+    networks:
+      - doctoo
+      - caddy
+    volumes:
+      - rabbitmq_prod_data:/var/lib/rabbitmq
+    labels:
+      caddy: rabbitmq.doctoo.org
+      caddy.reverse_proxy: '{{upstreams 15672}}'
+
+volumes:
+  postgres_prod_db:
+  rabbitmq_prod_data:
+  redis_prod_data:
+
+networks:
+  doctoo:
+  caddy:
+    external: true

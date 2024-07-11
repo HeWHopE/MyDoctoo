@@ -1,0 +1,10 @@
+List of specializations:
+
+1. Name: Dentist
+Id of Dentist: 83176ab6-7c54-4bd3-b3c6-08cc966c9ec1
+
+2. Name: Therapist
+Id of Therapist: 9b12c484-ad1a-4d81-9cd7-374e42b142be
+
+3. Name: Pediatrician
+Id of Pediatrician: 7e466363-25f7-45f3-9bf6-afba16c6ffac

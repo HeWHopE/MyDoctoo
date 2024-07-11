@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  postgres:
+    restart: always
+    image: postgres:14.5
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - ./dataset/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres_db:/var/lib/postgresql/data
+    ports:
+      - ${POSTGRES_PORT}:5432
+
+  adminer:
+    restart: always
+    image: adminer:latest
+    environment:
+      ADMINER_PLUGINS: 'dump-json'
+      ADMINER_DESIGN: 'rm-soft'
+    depends_on:
+      - postgres
+    ports:
+      - ${ADMINER_PORT}:8080
+
+  minio:
+    restart: always
+    image: bitnami/minio:latest
+    environment:
+      MINIO_ROOT_USER: ${MINIO_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD}
+    ports:
+      - 9000:9000
+      - 9001:9001
+
+  mailhog:
+    restart: always
+    image: mailhog/mailhog:latest
+    ports:
+      - 1025:1025
+      - 8025:8025
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - ${RMQ_PORT}:5672
+      - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RMQ_USERNAME}
+      RABBITMQ_DEFAULT_PASS: ${RMQ_PASSWORD}
+      RABBITMQ_NODE_PORT: ${RMQ_PORT}
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+volumes:
+  postgres_db:
+  rabbitmq_data:

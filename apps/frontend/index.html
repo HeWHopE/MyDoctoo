@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg" href="/assets/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Doctoo</title>
+    <link rel="stylesheet" href="./angular/browser/styles.css" data-for="angular" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+
+    <!-- added angular module -->
+    <script src="./angular/browser/polyfills.js" type="module" data-target="angular"></script>
+    <script src="./angular/browser/scripts.js" type="module" defer data-target="angular"></script>
+    <script src="./angular/browser/main.js" type="module" data-target="angular"></script>
+  </body>
+</html>

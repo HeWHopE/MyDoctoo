@@ -1,0 +1,405 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum BloodType {
+  O_PLUS
+  O_MINUS
+  A_PLUS
+  A_MINUS
+  B_PLUS
+  B_MINUS
+  AB_PLUS
+  AB_MINUS
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum AppointmentStatus {
+  PENDING_PAYMENT
+  PLANNED
+  COMPLETED
+  MISSED
+  CANCELED
+}
+
+enum AppointmentType {
+  CONSULTATION
+  FIRST_VISIT
+  ANNUAL_CHECKUP
+  FOLLOW_UP
+  SPECIALIST_REFERRAL
+  PROCEDURE
+  PREVENTIVE_CARE
+  REHABILITATION
+  TELEMEDICINE
+}
+
+enum NotificationModel {
+  APPOINTMENT
+  CHAT
+}
+
+enum NotificationAction {
+  NEW_APPOINTMENT
+  CONFIRMED_APPOINTMENT
+  UPCOMING_APPOINTMENT
+  COMPLETED_APPOINTMENT
+  MISSED_APPOINTMENT
+  CANCELED_APPOINTMENT
+  FILE_RECEIVED
+  NEW_MESSAGE
+  INVOICE_RECEIVED
+  PAYMENT_SUCCESSFUL
+}
+
+enum Role {
+  DOCTOR
+  PATIENT
+  ADMIN
+}
+
+model User {
+  id            String   @id @default(uuid())
+  firstName     String   @map("first_name")
+  lastName      String   @map("last_name")
+  phone         String
+  email         String   @unique
+  emailVerified Boolean  @default(false) @map("email_verified")
+  secretCode    String?  @map("secret_code")
+  password      String?
+  googleId      String?  @map("google_id")
+  avatarKey     String   @map("avatar_key")
+  role          Role
+  doctor        Doctor?
+  patient       Patient?
+
+  @@map("users")
+}
+
+model Favorite {
+  id        String  @id @default(uuid())
+  doctorId  String  @map("doctor_id")
+  patientId String  @map("patient_id")
+  doctor    Doctor  @relation(fields: [doctorId], references: [id])
+  patient   Patient @relation(fields: [patientId], references: [id])
+
+  @@unique([doctorId, patientId])
+  @@map("favorites")
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  text      String?
+  rate      Int
+  doctorId  String   @map("doctor_id")
+  patientId String   @map("patient_id")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+  doctor    Doctor   @relation(fields: [doctorId], references: [id])
+  patient   Patient  @relation(fields: [patientId], references: [id])
+
+  @@map("reviews")
+}
+
+model Notification {
+  id          String             @id @default(uuid())
+  patientId   String             @map("patient_id")
+  doctorId    String?            @map("doctor_id")
+  modelId     String             @map("model_id")
+  createdAt   DateTime           @default(now()) @map("created_at") @db.Timestamptz()
+  patient     Patient            @relation(fields: [patientId], references: [id])
+  doctor      Doctor?            @relation(fields: [doctorId], references: [id])
+  appointment Appointment        @relation(fields: [modelId], references: [id])
+  model       NotificationModel
+  action      NotificationAction
+  message     String
+  fileKey     String?            @map("file_key")
+
+  @@map("notifications")
+}
+
+model Doctor {
+  id              String                 @id @default(uuid())
+  userId          String                 @unique @map("user_id")
+  payrate         Int
+  about           String                 @map("about")
+  rating          Float                  @default(0)
+  user            User                   @relation(fields: [userId], references: [id])
+  appointments    Appointment[]
+  chats           Chat[]
+  specializations DoctorSpecialization[]
+  hospitals       HospitalDoctor[]
+  declarations    Declaration[]
+  favorites       Favorite[]
+  reviews         Review[]
+  doctorSchedule  DoctorSchedule?
+  Notification    Notification[]
+
+  @@map("doctors")
+}
+
+model DoctorSchedule {
+  id                String @id @default(uuid())
+  doctorId          String @unique @map("doctor_id")
+  startsWorkHourUTC Int    @map("starts_work_hour_utc")
+  endsWorkHourUTC   Int    @map("ends_work_hour_utc")
+  doctor            Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+
+  @@map("doctor_schedules")
+}
+
+model HospitalDoctor {
+  id         String   @id @default(uuid())
+  hospitalId String   @map("hospital_id")
+  doctorId   String   @map("doctor_id")
+  hospital   Hospital @relation(fields: [hospitalId], references: [id])
+  doctor     Doctor   @relation(fields: [doctorId], references: [id])
+
+  @@unique([hospitalId, doctorId])
+  @@map("hospital_doctors")
+}
+
+model Hospital {
+  id      String           @id @default(uuid())
+  name    String
+  country String
+  state   String?
+  city    String
+  street  String
+  zipCode Int?             @map("zip_code")
+  doctors HospitalDoctor[]
+
+  @@map("hospitals")
+}
+
+model Declaration {
+  id        Int     @id @default(autoincrement())
+  doctorId  String  @map("doctor_id")
+  patientId String  @unique @map("patient_id")
+  doctor    Doctor  @relation(fields: [doctorId], references: [id])
+  patient   Patient @relation(fields: [patientId], references: [id])
+
+  @@map("declarations")
+}
+
+model DoctorSpecialization {
+  id               String         @id @default(uuid())
+  doctorId         String         @map("doctor_id")
+  specializationId String         @map("specialization_id")
+  doctor           Doctor         @relation(fields: [doctorId], references: [id])
+  specialization   Specialization @relation(fields: [specializationId], references: [id])
+
+  @@map("doctor_specializations")
+}
+
+model Patient {
+  id                         String               @id @default(uuid())
+  userId                     String               @unique @map("user_id")
+  weight                     Int
+  height                     Int
+  age                        Int
+  bloodType                  BloodType            @map("blood_type")
+  gender                     Gender
+  identityCardType           String?              @map("identity_card_type")
+  identityCardKey            String?              @map("identity_card_key")
+  user                       User                 @relation(fields: [userId], references: [id])
+  declaration                Declaration?
+  appointments               Appointment[]
+  chats                      Chat[]
+  virtualAssistantChats      AssistantChat[]
+  allergies                  PatientAllergy[]
+  vaccinations               PatientVaccination[]
+  country                    String
+  state                      String?
+  city                       String
+  street                     String
+  apartment                  String?
+  zipCode                    Int?                 @map("zip_code")
+  favorites                  Favorite[]
+  reviews                    Review[]
+  notifications              Notification[]
+  emailNotificationToggle    Boolean              @default(false) @map("email_notification_toggle")
+  requestBillPaymentApproval Boolean              @default(false) @map("request_bill_payment_approval")
+  twoFactorAuthToggle        Boolean              @default(false) @map("two_factor_auth_toggle")
+  PatientCondition           PatientCondition[]
+
+  @@map("patients")
+}
+
+model Vaccination {
+  id       String               @id @default(uuid())
+  name     String
+  patients PatientVaccination[]
+
+  @@map("vaccinations")
+}
+
+model PatientVaccination {
+  id            String      @id @default(uuid())
+  vaccinationId String      @map("vaccination_id")
+  patientId     String      @map("patient_id")
+  vaccination   Vaccination @relation(fields: [vaccinationId], references: [id])
+  patient       Patient     @relation(fields: [patientId], references: [id])
+
+  @@map("patient_vaccinations")
+}
+
+model Allergy {
+  id       String           @id @default(uuid())
+  name     String
+  patients PatientAllergy[]
+
+  @@map("allergies")
+}
+
+model PatientAllergy {
+  id        String  @id @default(uuid())
+  patientId String  @map("patient_id")
+  allergyId String  @map("allergy_id")
+  patient   Patient @relation(fields: [patientId], references: [id])
+  allergy   Allergy @relation(fields: [allergyId], references: [id])
+
+  @@map("patient_allergies")
+}
+
+model Condition {
+  id              String                    @id @default(uuid())
+  name            String
+  patients        PatientCondition[]
+  specializations SpecializationCondition[]
+
+  @@map("conditions")
+}
+
+model PatientCondition {
+  id          String    @id @default(uuid())
+  patientId   String    @map("patient_id")
+  conditionId String    @map("condition_id")
+  patient     Patient   @relation(fields: [patientId], references: [id])
+  condition   Condition @relation(fields: [conditionId], references: [id])
+
+  @@map("patient_conditions")
+}
+
+model SpecializationCondition {
+  id               String         @id @default(uuid())
+  specializationId String         @map("specialization_id")
+  conditionId      String         @map("condition_id")
+  specialization   Specialization @relation(fields: [specializationId], references: [id])
+  condition        Condition      @relation(fields: [conditionId], references: [id])
+
+  @@map("specialization_conditions")
+}
+
+model Specialization {
+  id                   String                    @id @default(uuid())
+  name                 String
+  conditions           SpecializationCondition[]
+  DoctorSpecialization DoctorSpecialization[]
+
+  @@map("specializations")
+}
+
+model Appointment {
+  id                String            @id @default(uuid())
+  patientId         String            @map("patient_id")
+  doctorId          String            @map("doctor_id")
+  createdAt         DateTime          @default(now()) @map("created_at") @db.Timestamptz()
+  status            AppointmentStatus
+  notes             String?
+  notesSummary      Json?
+  type              AppointmentType   @default(CONSULTATION)
+  videoRecordKey    String?           @map("video_record_key")
+  paymentInvoiceKey String?           @map("payment_invoice_key")
+  paymentReceiptKey String?           @map("payment_receipt_key")
+  price             Int               @map("appointment_price")
+  startedAt         DateTime          @map("started_at") @db.Timestamptz()
+  endedAt           DateTime?         @map("ended_at") @db.Timestamptz()
+  patient           Patient           @relation(fields: [patientId], references: [id])
+  doctor            Doctor            @relation(fields: [doctorId], references: [id])
+  Notification      Notification[]
+  ChatMessage       ChatMessage[]
+
+  @@map("appointments")
+}
+
+model Chat {
+  id                    String        @id @default(uuid())
+  patientId             String        @map("patient_id")
+  doctorId              String        @map("doctor_id")
+  patient               Patient       @relation(fields: [patientId], references: [id])
+  doctor                Doctor        @relation(fields: [doctorId], references: [id])
+  messages              ChatMessage[]
+  missedMessagesDoctor  Int           @default(0)
+  missedMessagesPatient Int           @default(0)
+
+  @@unique([patientId, doctorId])
+  @@map("chats")
+}
+
+model AssistantChat {
+  id               String             @id @default(uuid())
+  Patient          Patient            @relation(fields: [patientId], references: [id])
+  patientId        String
+  AssistantMessage AssistantMessage[]
+
+  @@map("assistant_chats")
+}
+
+enum AssistantMessageRole {
+  USER
+  ASSISTANT
+}
+
+model Prompt {
+  id        String   @id @default(uuid())
+  text      String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("prompts")
+}
+
+model AssistantMessage {
+  id              String               @id @default(uuid())
+  sentAt          DateTime             @default(now()) @map("sent_at")
+  role            AssistantMessageRole @map("role")
+  content         String
+  assistantChatId String               @map("chat_id")
+  assistantChat   AssistantChat        @relation(fields: [assistantChatId], references: [id])
+
+  @@map("assistant_messages")
+}
+
+model ChatMessage {
+  id            String              @id @default(uuid())
+  chatId        String              @map("chat_id")
+  sender        Role?               @map("sender")
+  sentAt        DateTime            @default(now()) @map("sent_at") @db.Timestamptz()
+  text          String?
+  editedAt      DateTime            @updatedAt @map("edited_at") @db.Timestamptz()
+  appointmentId String?             @map("appointment_id")
+  appointment   Appointment?        @relation(fields: [appointmentId], references: [id])
+  chat          Chat                @relation(fields: [chatId], references: [id])
+  attachments   MessageAttachment[]
+
+  @@map("chat_messages")
+}
+
+model MessageAttachment {
+  id            String      @id @default(uuid())
+  messageId     String      @map("message_id")
+  attachmentKey String      @map("attachment_key")
+  message       ChatMessage @relation(fields: [messageId], references: [id])
+
+  @@map("message_attachments")
+}

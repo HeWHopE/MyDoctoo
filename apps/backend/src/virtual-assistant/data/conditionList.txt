@@ -1,0 +1,13 @@
+List of conditions:
+
+1. Condition - Astham
+Id: 591568f7-3932-4deb-8c3e-ecac75339c71
+
+2. Condition - Cold
+Id: ae8579a6-9d6c-4b32-a740-88a754b22968
+
+3. Condition - Flu
+Id: cc3c7aef-2801-4543-85e0-621a7d018113
+
+4. Condition - Caries
+Id: 03f5c7ad-ff45-4cdd-8f70-361efc77a34f

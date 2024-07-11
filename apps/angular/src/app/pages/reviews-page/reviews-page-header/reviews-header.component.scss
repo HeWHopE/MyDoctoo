@@ -1,0 +1,68 @@
+@import '../../../../styles.scss';
+
+.reviews-header {
+  display: flex;
+  width: 60%; // equivalent to w-3/5 in Tailwind
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem; // equivalent to gap-x-6 in Tailwind
+
+  .avatar {
+    border-radius: 0.5rem; // equivalent to rounded-lg in Tailwind
+  }
+
+  .details {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.5rem; // equivalent to gap-y-2 in Tailwind
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+
+      .name {
+        font-size: 1.5rem; // equivalent to text-2xl in Tailwind
+        font-weight: bold; // equivalent to font-bold in Tailwind
+        color: black; // equivalent to text-black in Tailwind
+      }
+    }
+
+    .specialization {
+      font-size: 1rem; // equivalent to text-base in Tailwind
+      font-weight: 500; // equivalent to font-medium in Tailwind
+      color: #707d7e; // equivalent to text-grey-1 in Tailwind
+    }
+
+    .rating {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem; // equivalent to gap-x-3 in Tailwind
+
+      .stars {
+        display: flex;
+        cursor: default;
+        gap: 0.25rem;
+        margin-top: 10px;
+      }
+
+      .reviews-count {
+        cursor: default;
+        color: #454f50; // equivalent to text-text in Tailwind
+      }
+    }
+  }
+}
+
+.text-main-dark {
+  color: $main-dark;
+}
+
+.text-grey-5 {
+  color: $grey-5;
+}
+
+.star-size {
+  height: 18px;
+  width: 18px;
+}

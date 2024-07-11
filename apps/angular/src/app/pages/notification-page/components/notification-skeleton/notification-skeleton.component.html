@@ -1,0 +1,17 @@
+<div class="skeleton">
+  <div class="skeleton_buttons">
+    <app-skeleton type="text" class="button"></app-skeleton>
+    <app-skeleton type="text" class="button"></app-skeleton>
+    <app-skeleton type="text" class="button"></app-skeleton>
+    <app-skeleton type="text" class="button"></app-skeleton>
+  </div>
+  <div class="skeleton_wrap" [ngClass]="{ 'grid-view': isGridView, 'list-view': !isGridView }">
+    @for (item of amountOfCards; track item) {
+      <div class="sceleton_card card">
+        <app-skeleton type="image" size="small" class="card_icon"></app-skeleton>
+        <app-skeleton type="text" class="card_title" size="medium"></app-skeleton>
+        <app-skeleton type="text" class="card_body"></app-skeleton>
+      </div>
+    }
+  </div>
+</div>

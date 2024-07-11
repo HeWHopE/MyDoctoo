@@ -1,0 +1,27 @@
+<section>
+  <mat-card *ngFor="let review of reviews; let idx = index">
+    <div class="star-row">
+      <i
+        class="fa-solid fa-star"
+        *ngFor="let i of [].constructor(5); let idx = index"
+        [ngClass]="{
+          'star-size text-main-dark': review.rate > idx,
+          'star-size text-grey-5': review.rate <= idx
+        }"
+        style="margin-right: 4px">
+      </i>
+    </div>
+
+    <mat-card-content *ngIf="review.patient">
+      <blockquote>
+        <p>
+          {{ review.text }}
+        </p>
+      </blockquote>
+
+      <span>
+        {{ review.patient.user.firstName + ' ' + review.patient.user.lastName }}
+      </span>
+    </mat-card-content>
+  </mat-card>
+</section>

@@ -1,0 +1,139 @@
+@import './../../../../../styles.scss';
+
+.item {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  grid-template-areas: 'icon message x';
+  gap: 1rem;
+  justify-content: center;
+
+  &-new {
+    grid-template-areas: 'icon message' 'x button';
+    grid-template-columns: 40px auto;
+
+    @media (min-width: 700px) {
+      grid-template-columns: 40px 1fr auto;
+      grid-template-areas: 'icon message button';
+    }
+  }
+
+  &_icon {
+    grid-area: icon;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.5rem;
+    background: $background;
+    color: $grey-1;
+  }
+
+  &_wrap {
+    grid-area: message;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.25rem;
+
+    &.grid-view {
+      min-height: 96px;
+
+      @media (min-width: 920px) {
+        min-height: 76px;
+      }
+    }
+  }
+
+  &_message {
+    color: $black;
+    align-self: flex-start;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 24px;
+    text-align: start;
+
+    button {
+      font-size: inherit;
+      font-weight: inherit;
+      color: $main;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .grid-view & {
+      font-size: 0.875rem;
+    }
+
+    @media (min-width: 560px) {
+      font-size: 1rem;
+    }
+  }
+
+  &_time {
+    color: $grey-2;
+    align-self: flex-start;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 20px;
+
+    .grid-view & {
+      font-size: 0.725rem;
+    }
+  }
+
+  &_button {
+    grid-area: button;
+    align-self: flex-start;
+    color: $main;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 17px;
+    border-radius: 0.5rem;
+    border: 1px solid $main;
+    padding: 0.5rem 1rem;
+    transition: background 0.3s, color 0.3s;
+
+    &:hover {
+      background: $main;
+      color: $white;
+    }
+
+    @media (min-width: 450px) {
+      width: fit-content;
+      justify-self: flex-end;
+    }
+  }
+}
+
+.confirmed_appointment {
+  color: $main;
+}
+
+.completed_appointment {
+  color: $main;
+}
+
+.missed_appointment {
+  color: $error;
+}
+
+.canceled_appointment {
+  color: $error;
+}
+
+.file_received {
+  color: $main-dark;
+}
+
+.new_message {
+  color: $orange;
+}
+
+.payment_successful {
+  color: $main-dark;
+}

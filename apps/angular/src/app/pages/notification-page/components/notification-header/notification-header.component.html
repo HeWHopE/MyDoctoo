@@ -1,0 +1,30 @@
+<div class="item" [ngClass]="{ 'item-new': isNewAppointment }">
+  <ng-container *ngTemplateOutlet="tmpl; context: { icon: iconNames[item.action] }"> </ng-container>
+  <div class="item_wrap" [ngClass]="{ 'grid-view': isGridView, 'list-view': !isGridView }">
+    <p class="item_message">
+      {{ item.message }}
+      @if (item.action === notificationActionEnum.CONFIRMED_APPOINTMENT) {
+        <span>
+          {{ getTimeFromResponse(item) }}
+        </span>
+      }
+      @if (item.action === notificationActionEnum.FILE_RECEIVED && item.fileKey) {
+        <button (click)="getFile(item.fileKey)">a file</button>
+      }
+    </p>
+    <p class="item_time">{{ item.createdAt | timeFormatter }}</p>
+  </div>
+  @if (isNewAppointment) {
+    <button class="item_button" (click)="redirectToPaymentPage(item.modelId)">Confirm and pay</button>
+  }
+</div>
+
+<ng-template #tmpl let-icon="icon">
+  <div class="item_icon">
+    <mat-icon
+      class="{{ item.action | lowercase }}"
+      aria-hidden="false"
+      aria-label="card"
+      fontIcon="{{ icon }}"></mat-icon>
+  </div>
+</ng-template>

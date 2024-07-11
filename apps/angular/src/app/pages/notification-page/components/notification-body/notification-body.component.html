@@ -1,0 +1,32 @@
+<div class="content">
+  @if (appointmentActionTypes.includes(item.action)) {
+    <div class="content_img">
+      @if (item.doctor.user.avatarKey !== '') {
+        <img src="{{ url }}" alt="doctor" />
+      } @else {
+        <mat-icon aria-hidden="false" aria-label="card" fontIcon="person_outline" class="content_img-icon"></mat-icon>
+      }
+    </div>
+
+    <div class="content_wrap">
+      <p class="content_info">
+        Appointment with <span class="content_info-name">{{ doctorName }}</span>
+      </p>
+      <p class="content_specialization">{{ specializationNames }}</p>
+      <div class="content_reviews">
+        @if (doctorRating !== undefined) {
+          <app-stars-rating
+            size="small"
+            [reviewsCount]="doctorReviewCount"
+            [rating]="doctorRating"
+            doctorId="{{ doctorId }}"></app-stars-rating>
+        }
+      </div>
+    </div>
+    <div class="content_price">
+      <p>
+        <span>${{ item.appointment.price }}</span> / visit
+      </p>
+    </div>
+  }
+</div>

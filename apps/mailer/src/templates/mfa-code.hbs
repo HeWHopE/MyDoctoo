@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification Code</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            font: 700 2.5em/1.2 'Roboto', sans-serif;
+        }
+
+        p {
+            font: 400 1.3em/1.6 'Roboto', sans-serif;
+        }
+
+        .text-main {
+            color: "red" !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .img-header {
+            width: 100%;
+            height: 100px;
+            background-image: url("https://iili.io/Jgg2mVn.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .main {
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 2rem 5rem 0rem 5rem;
+        }
+
+        .code {
+            background-color: #F1F6F9;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .logo {
+            width: 2rem;
+            height: 2rem;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .logo-text {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .footer {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="img-header"></div>
+        <div class="text-center">
+            <h1>Verification Code</h1>
+        </div>
+
+        <div class="main">
+            <p>Hello {{name}},</p>
+            <p>Your verification code is:</p>
+            <div class="code">
+                <p>{{code}}</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <img src="https://iili.io/Jggqg3u.png" alt="Doctoo" class="logo">
+            <h2 style="margin-left: 1rem; color: #089BAB;" class="logo-text">Doctoo</h2>
+        </div>
+
+    </div>
+</body>
+
+</html>

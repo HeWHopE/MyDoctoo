@@ -1,0 +1,36 @@
+.spinner {
+  animation: spinner_animation 0.8s infinite;
+}
+.spinner_delay_1 {
+  animation-delay: 0.1s;
+}
+.spinner_delay_2 {
+  animation-delay: 0.2s;
+}
+.spinner_delay_3 {
+  animation-delay: 0.3s;
+}
+.spinner_delay_4 {
+  animation-delay: 0.4s;
+}
+.spinner_delay_5 {
+  animation-delay: 0.5s;
+}
+.spinner_delay_6 {
+  animation-delay: 0.6s;
+}
+.spinner_delay_7 {
+  animation-delay: 0.7s;
+}
+
+@keyframes spinner_animation {
+  0%,
+  100% {
+    animation-timing-function: cubic-bezier(0, 1, 0, 1);
+    r: 0;
+  }
+  12.5% {
+    animation-timing-function: cubic-bezier(0.53, 0, 0.61, 0.73);
+    r: 2px;
+  }
+}

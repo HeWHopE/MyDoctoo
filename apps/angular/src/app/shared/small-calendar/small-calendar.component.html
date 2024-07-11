@@ -1,0 +1,30 @@
+<mat-card class="calendar">
+  <div class="calendar-header">
+    <h3>{{ currentDate | date: 'MMMM yyyy' }}</h3>
+
+    <div class="navigation">
+      <mat-icon (click)="prevMonth()">keyboard_arrow_left</mat-icon>
+      <mat-icon (click)="nextMonth()">keyboard_arrow_right</mat-icon>
+    </div>
+  </div>
+
+  <div *ngFor="let day of daysOfWeek" class="day-of-week">
+    {{ day }}
+  </div>
+
+  <div
+    *ngFor="let day of days"
+    [ngClass]="{
+      'text-black': day.month() === currentMonth.month(),
+      'text-grey-4': day.month() !== currentMonth.month()
+    }"
+    class="day">
+    <p [class.today]="day.isSame(today, 'day')">{{ day.toDate() | date: 'd' }}</p>
+
+    <ul *ngIf="meetingsForDay">
+      <li
+        *ngFor="let status of getMeetingsByStatus(day, meetingsForDay) | keyvalue"
+        [ngClass]="getMeetingByStatusColor(status.key)"></li>
+    </ul>
+  </div>
+</mat-card>

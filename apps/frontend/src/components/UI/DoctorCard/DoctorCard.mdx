@@ -1,0 +1,25 @@
+import { Canvas, Meta } from '@storybook/blocks';
+
+import * as DoctorCardStories from './DoctorCard.stories';
+
+<Meta of={DoctorCardStories} />
+
+# DoctorCard
+
+The DoctorCard component provides primitive building blocks for creating various doctor cards. It is created using
+`Compound component` pattern to make the component composable and allow the placement of other components inside it.
+
+<Canvas of={DoctorCardStories.Default} />
+
+The code:
+
+```ts
+<DoctorCard>
+        <DoctorCard.Image url='https://thispersondoesnotexist.com/' />
+        <DoctorCard.Name>John Doe</DoctorCard.Name>
+        <DoctorCard.Specializations specializations={[{ id: '1', name: 'Therapist' }]} />
+        <DoctorCard.PayrateLabel payrate={75} />
+        <DoctorCard.Tags tags={['Top doctor']} />
+        <DoctorCard.Rating rating={4.5} reviewsCount={10} doctorId='d8b31236-b72a-4a95-87c5-4e481b5cc895'/>
+</DoctorCard>
+```

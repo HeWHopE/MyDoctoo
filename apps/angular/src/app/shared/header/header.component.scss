@@ -1,0 +1,33 @@
+@import './../../../styles.scss';
+
+.header {
+  width: 100%;
+  display: grid;
+  grid-template-areas: 'icon title' 'child child';
+  grid-template-columns: 1.5rem 1fr;
+  align-items: center;
+  column-gap: 0.75rem;
+  row-gap: 0.5rem;
+
+  @media (min-width: 600px) {
+    grid-template-columns: 1.5rem 1fr auto;
+    grid-template-areas: 'icon title child';
+  }
+
+  &_icon {
+    grid-area: icon;
+    color: $main;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  &_title {
+    grid-area: title;
+    color: $black;
+    line-height: 36px;
+  }
+
+  &_child {
+    grid-area: child;
+  }
+}

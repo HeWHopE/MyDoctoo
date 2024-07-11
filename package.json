@@ -1,0 +1,56 @@
+{
+  "name": "internship-2024-doctoo",
+  "version": "1.0.0",
+  "description": "WIP.",
+  "type": "module",
+  "scripts": {
+    "backend:dev": "pnpm -F @internship-2024-doctoo/backend dev",
+    "backend:build": "pnpm -F @internship-2024-doctoo/backend build",
+    "backend:start": "pnpm -F @internship-2024-doctoo/backend start",
+    "backend:test": "pnpm -F @internship-2024-doctoo/backend test",
+    "backend:test:watch": "pnpm -F @internship-2024-doctoo/backend test:watch",
+    "backend:test:cov": "pnpm -F @internship-2024-doctoo/backend test:cov",
+    "backend:test:debug": "pnpm -F @internship-2024-doctoo/backend test:debug",
+    "backend:test:e2e": "pnpm -F @internship-2024-doctoo/backend test:e2e",
+    "backend:format": "pnpm -F @internship-2024-doctoo/backend format",
+    "backend:lint": "pnpm -F @internship-2024-doctoo/backend lint",
+    "backend:prebuild": "pnpm -F @internship-2024-doctoo/backend prebuild",
+    "summarizer:dev": "pnpm -F @internship-2024-doctoo/summarizer dev",
+    "summarizer:build": "pnpm -F @internship-2024-doctoo/summarizer build",
+    "summarizer:start": "pnpm -F @internship-2024-doctoo/summarizer start",
+    "summarizer:format": "pnpm -F @internship-2024-doctoo/summarizer format",
+    "summarizer:lint": "pnpm -F @internship-2024-doctoo/summarizer lint",
+    "summarizer:prebuild": "pnpm -F @internship-2024-doctoo/summarizer prebuild",
+    "frontend:dev": "pnpm -F @internship-2024-doctoo/frontend dev",
+    "frontend:build": "pnpm -F @internship-2024-doctoo/frontend build",
+    "frontend:start": "pnpm -F @internship-2024-doctoo/frontend start",
+    "frontend:preview": "pnpm -F @internship-2024-doctoo/frontend preview",
+    "frontend:test": "pnpm -F @internship-2024-doctoo/frontend test",
+    "frontend:storybook": "pnpm -F @internship-2024-doctoo/frontend storybook",
+    "frontend:storybook:build": "pnpm -F @internship-2024-doctoo/frontend storybook:build",
+    "frontend:api:sync": "pnpm -F @internship-2024-doctoo/frontend api:sync",
+    "frontend:format": "pnpm -F @internship-2024-doctoo/frontend format",
+    "frontend:lint": "pnpm -F @internship-2024-doctoo/frontend lint",
+    "format": "pnpm -r format",
+    "lint": "pnpm -r lint",
+    "build": "pnpm -r --workspace-concurrency=1 build",
+    "prepare": "husky",
+    "docker:up": "docker compose -f docker-compose.dev.yaml --env-file=.env.dev up -d",
+    "docker:down": "docker compose -f docker-compose.dev.yaml --env-file=.env.dev down"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Radency/internship-2024-doctoo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Radency/internship-2024-doctoo/issues"
+  },
+  "homepage": "https://github.com/Radency/internship-2024-doctoo#readme",
+  "devDependencies": {
+    "husky": "9.0.11",
+    "prettier": "3.2.5"
+  }
+}

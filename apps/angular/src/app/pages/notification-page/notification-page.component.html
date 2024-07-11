@@ -1,0 +1,93 @@
+<section class="section no-scrollbar">
+  <app-header [title]="title" [icon]="icon"> </app-header>
+
+  <mat-card class="section_card">
+    <mat-card-content class="section_card_content">
+      @defer {
+        <div class="section_header">
+          <div class="section_filters button_filters">
+            @for (filter of filters; track filter) {
+              <button
+                mat-stroked-button
+                color="primary"
+                (click)="onFilterChange(filter)"
+                [ngClass]="{ active: activeFilter === filter }">
+                {{ filter }}
+              </button>
+            }
+          </div>
+
+          @if (notifications?.length && bp1280) {
+            <button (click)="toggleView()" class="button_view">
+              <mat-icon aria-hidden="false" aria-label="card">
+                {{ isGridView ? 'view_headline' : 'grid_view' }}
+              </mat-icon>
+            </button>
+          }
+        </div>
+
+        @if (notifications?.length) {
+          <cdk-accordion class="list" [ngClass]="{ 'grid-view': isGridView && bp1280, 'list-view': !isGridView }">
+            @for (item of notifications; track item.id) {
+              <mat-card class="list_card card" [ngClass]="{ 'card-hover': shouldShowDetails(item) }">
+                <mat-card-content class="card_content height" [ngClass]="{ 'card_content-grid': isGridView && bp1280 }">
+                  <cdk-accordion-item
+                    #accordionItem="cdkAccordionItem"
+                    class="accordion"
+                    role="button"
+                    tabindex="0"
+                    [attr.id]="'accordion-header-' + item.id"
+                    [attr.aria-expanded]="accordionItem.expanded"
+                    [attr.aria-controls]="'accordion-body-' + item.id">
+                    <div class="accordion_header">
+                      @if (shouldShowDetails(item)) {
+                        <button class="accordion_button" (click)="accordionItem.toggle()">
+                          <app-notification-header
+                            [item]="item"
+                            [isGridView]="isGridView && bp1280"
+                            class="notification_header"></app-notification-header>
+                          <mat-icon
+                            [ngClass]="{ 'accordion_icon-rotate': accordionItem.expanded }"
+                            aria-hidden="false"
+                            aria-label="card"
+                            fontIcon="expand_more"
+                            class="accordion_icon"></mat-icon>
+                        </button>
+                      } @else {
+                        <app-notification-header
+                          [item]="item"
+                          [isGridView]="isGridView && bp1280"
+                          class="notification_header"></app-notification-header>
+                      }
+                    </div>
+                    <div
+                      class="accordion_body"
+                      role="region"
+                      [style.display]="accordionItem.expanded ? '' : 'none'"
+                      [attr.id]="'accordion-body-' + item.id"
+                      [@accordion]="accordionItem.expanded ? 'expanded' : 'collapsed'"
+                      [attr.aria-labelledby]="'accordion-header-' + item.id">
+                      <app-notification-body [item]="item"></app-notification-body>
+                    </div>
+                  </cdk-accordion-item>
+                </mat-card-content>
+              </mat-card>
+            }
+          </cdk-accordion>
+          @if (totalCount && totalCount > 10) {
+            <mat-paginator
+              #paginator
+              [length]="totalCount"
+              [pageSize]="limit"
+              [pageSizeOptions]="paginationOptions"
+              (page)="onPaginateChange($event)"></mat-paginator>
+          }
+        } @else {
+          <p class="section_text-empty">You don’t have any notifications yet</p>
+        }
+      } @loading {
+        <app-notification-skeleton [isGridView]="isGridView && bp1280"></app-notification-skeleton>
+      }
+    </mat-card-content>
+  </mat-card>
+</section>

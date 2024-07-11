@@ -1,0 +1,57 @@
+.skeleton {
+  background-color: #e0e0e0;
+  animation: pulse 2.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.6;
+  }
+}
+
+.text {
+  min-height: 1.25rem;
+  border-radius: inherit;
+  height: inherit;
+
+  &.small {
+    min-height: 1.25rem;
+  }
+
+  &.medium {
+    min-height: 3rem;
+  }
+
+  &.large {
+    min-height: 4.5rem;
+  }
+}
+
+.image {
+  height: 100%;
+  width: 100%;
+  border-radius: 0.5rem;
+
+  &.small {
+    max-width: 2.5rem;
+    max-height: 2.5rem;
+  }
+
+  &.medium {
+    max-width: 3.875rem;
+    max-height: 3.875rem;
+  }
+
+  &.large {
+    max-width: 6.125rem;
+    max-height: 6.125rem;
+  }
+}

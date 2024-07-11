@@ -1,0 +1,16 @@
+.custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 0.3em;
+    height: 1em;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #2cddf1;
+    border-radius: 3px;
+
+    &:hover {
+      background: rgba(11, 2, 2, 0.2);
+      cursor: pointer !important; /* Increase specificity with !important */
+    }
+  }
+}

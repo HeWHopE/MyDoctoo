@@ -1,0 +1,15 @@
+<div class="rating-container" ngClass="'small': small">
+  <div class="stars-container">
+    <mat-icon
+      *ngFor="let i of [].constructor(5); let idx = index"
+      [ngClass]="{
+        'star-filled': rating > idx,
+        'star-empty': rating <= idx
+      }"
+      class="star">
+      star
+    </mat-icon>
+  </div>
+
+  <p class="reviews-link">{{ reviewsCount }} reviews</p>
+</div>
